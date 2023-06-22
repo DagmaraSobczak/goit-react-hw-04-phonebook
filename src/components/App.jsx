@@ -1,19 +1,15 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import ContactForm from './ContactForm/ContactForm';
 import { nanoid } from 'nanoid';
 import ContactsList from './ContactsList/ContactsList';
 import Filter from './Filter/Filter';
 import Contacts from './Contacts/Contacts.json';
 
-class App extends Component {
-  state = {
-    contacts: Contacts,
-    filter: '',
-  };
+const App = () => {
+  const [contacts, setContacts] = useState(Contacts);
+  const [filter, setFilter] = useState('');
 
-  handleFormSubmit = name => {
-    const { contacts } = this.state;
-
+  const handleFormSubmit = name => {
     let existContact = contacts.find(
       contact => name.toLowerCase() === contact.name.toLowerCase()
     );
@@ -28,40 +24,35 @@ class App extends Component {
       name: name,
     };
 
-    this.setState(prevState => ({
-      contacts: [...prevState.contacts, newContact],
-    }));
+    setContacts(prevContacts => [...prevContacts, newContact]);
   };
 
-  handleFilterChange = event => {
-    this.setState({ filter: event.target.value });
+  const handleFilterChange = event => {
+    setFilter(event.target.value);
   };
 
-  deleteContact = id => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== id),
-    }));
-  };
-
-  render() {
-    const { name, contacts, filter } = this.state;
-
-    const filteredContacts = contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
+  const deleteContact = id => {
+    setContacts(prevContacts =>
+      prevContacts.filter(contact => contact.id !== id)
     );
-    return (
-      <>
-        <h1>Phonebook</h1>
-        <ContactForm name={name} onFormSubmit={this.handleFormSubmit} />
-        <Filter filteredContacts={this.handleFilterChange} />
-        <h2>Contacts</h2>
-        <ContactsList
-          contacts={filteredContacts}
-          onDelete={this.deleteContact}
-        />
-      </>
-    );
-  }
-}
+  };
+
+  const filteredContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  return (
+    <>
+      <h1>Phonebook</h1>
+      <ContactForm
+        /*name={name}*/
+        onFormSubmit={handleFormSubmit}
+      />
+      <Filter filteredContacts={handleFilterChange} />
+      <h2>Contacts</h2>
+      <ContactsList contacts={filteredContacts} onDelete={deleteContact} />
+    </>
+  );
+};
 
 export default App;

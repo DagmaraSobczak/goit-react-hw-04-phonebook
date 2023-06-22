@@ -1,32 +1,27 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import css from './ContactsList.module.css';
 
-export default class ContactsList extends Component {
-  render() {
-    const { contacts, onDelete } = this.props;
+const ContactsList = ({ contacts, onDelete }) => {
+  return (
+    <ul className={css.list}>
+      {contacts.map(({ id, name, number }) => (
+        <li className={css.items} key={id}>
+          <p className={css.content}>
+            {name}: {number}
+          </p>
 
-    return (
-      <ul className={css.list}>
-        {contacts.map(({ id, name, number }) => (
-          <li className={css.items} key={id}>
-            <p className={css.content}>
-              {name}: {number}
-            </p>
-
-            <button
-              className={css.btn}
-              type="button"
-              onClick={() => onDelete(id)}
-            >
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
-    );
-  }
-}
+          <button
+            className={css.btn}
+            type="button"
+            onClick={() => onDelete(id)}
+          >
+            Delete
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+};
 
 ContactsList.propTypes = {
   contacts: PropTypes.arrayOf(
@@ -38,3 +33,4 @@ ContactsList.propTypes = {
   ).isRequired,
   onDelete: PropTypes.func.isRequired,
 };
+export default ContactsList;
