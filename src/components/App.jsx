@@ -20,7 +20,7 @@ const App = () => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
-  const handleFormSubmit = name => {
+  const handleFormSubmit = (name, number) => {
     let existContact = contacts.find(
       contact => name.toLowerCase() === contact.name.toLowerCase()
     );
@@ -33,6 +33,7 @@ const App = () => {
     const newContact = {
       id: nanoid(),
       name: name,
+      number: number, // Dodaj właściwość number do nowego kontaktu
     };
 
     setContacts(prevContacts => [...prevContacts, newContact]);
